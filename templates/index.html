@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="home" class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6 order-lg-1 order-2">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Hi, I'm <span class="text-primary">Omkar Tanaji Patil</span>
+                    </h1>
+                    <h2 class="h4 text-muted mb-4">Python/ML Developer & Data Scientist</h2>
+                    <p class="lead mb-4">
+                        I'm passionate about building intelligent systems and creating data-driven solutions. 
+                        With expertise in Python, machine learning, and full-stack development, I transform 
+                        complex problems into elegant solutions.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#projects" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-code me-2"></i>View My Work
+                        </a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-envelope me-2"></i>Get In Touch
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-2 order-1 text-center">
+                <div class="hero-image">
+                    <img src="{{ url_for('static', filename='images/placeholder-profile.svg') }}" 
+                         alt="Profile Photo" class="profile-photo">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">About Me</h2>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="about-content">
+                            <p class="lead">
+                                I'm a passionate Python developer and machine learning enthusiast with 
+                                [X years] of experience in building scalable applications and intelligent systems.
+                            </p>
+                            <p>
+                                My journey in technology began with a fascination for data and algorithms. 
+                                Over the years, I've developed expertise in various domains including web development, 
+                                data science, machine learning, and cloud computing. I believe in writing clean, 
+                                maintainable code and creating solutions that make a real impact.
+                            </p>
+                            <p>
+                                When I'm not coding, you can find me exploring new technologies, contributing to 
+                                open-source projects, or sharing knowledge through technical writing and mentoring.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="skills-section">
+                            <h4>Technical Skills</h4>
+                            <div class="skill-category">
+                                <h6>Programming Languages</h6>
+                                <div class="skill-tags">
+                                    <span class="skill-tag">Python</span>
+                                    <span class="skill-tag">JavaScript</span>
+                                    <span class="skill-tag">SQL</span>
+                                    <span class="skill-tag">R</span>
+                                </div>
+                            </div>
+                            <div class="skill-category">
+                                <h6>Frameworks & Libraries</h6>
+                                <div class="skill-tags">
+                                    <span class="skill-tag">Flask</span>
+                                    <span class="skill-tag">Django</span>
+                                    <span class="skill-tag">TensorFlow</span>
+                                    <span class="skill-tag">PyTorch</span>
+                                    <span class="skill-tag">Pandas</span>
+                                    <span class="skill-tag">NumPy</span>
+                                </div>
+                            </div>
+                            <div class="skill-category">
+                                <h6>Tools & Technologies</h6>
+                                <div class="skill-tags">
+                                    <span class="skill-tag">Git</span>
+                                    <span class="skill-tag">Docker</span>
+                                    <span class="skill-tag">AWS</span>
+                                    <span class="skill-tag">PostgreSQL</span>
+                                    <span class="skill-tag">MongoDB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Links Section -->
+<section id="links" class="section-padding bg-dark-subtle">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-title">Connect With Me</h2>
+                <p class="lead mb-5">Let's connect and collaborate on exciting projects!</p>
+                <div class="social-links">
+                    <a href="https://github.com/yourusername" class="social-link" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://linkedin.com/in/yourprofile" class="social-link" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://leetcode.com/yourusername" class="social-link" target="_blank">
+                        <i class="fas fa-code"></i>
+                        <span>LeetCode</span>
+                    </a>
+                    <a href="https://medium.com/@yourusername" class="social-link" target="_blank">
+                        <i class="fab fa-medium"></i>
+                        <span>Medium</span>
+                    </a>
+                    <a href="https://twitter.com/yourusername" class="social-link" target="_blank">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">My Projects</h2>
+                
+                <!-- Completed Projects -->
+                <div class="projects-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-check-circle text-success me-2"></i>Completed Projects
+                    </h3>
+                    <div class="row">
+                        {% for project in completed_projects %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="project-card">
+                                {% if project.image_url %}
+                                <div class="project-image">
+                                    <img src="{{ project.image_url }}" alt="{{ project.title }}">
+                                </div>
+                                {% endif %}
+                                <div class="project-content">
+                                    <h5 class="project-title">{{ project.title }}</h5>
+                                    <p class="project-description">{{ project.description }}</p>
+                                    <div class="tech-stack">
+                                        {% for tech in project.tech_stack.split(',') %}
+                                        <span class="tech-badge">{{ tech.strip() }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="project-links">
+                                        {% if project.github_url %}
+                                        <a href="{{ project.github_url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                            <i class="fab fa-github me-1"></i>Code
+                                        </a>
+                                        {% endif %}
+                                        {% if project.live_url %}
+                                        <a href="{{ project.live_url }}" class="btn btn-primary btn-sm" target="_blank">
+                                            <i class="fas fa-external-link-alt me-1"></i>Live Demo
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Current Projects -->
+                <div class="projects-category">
+                    <h3 class="category-title">
+                        <i class="fas fa-clock text-warning me-2"></i>Current Projects
+                    </h3>
+                    <div class="row">
+                        {% for project in current_projects %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="project-card current-project">
+                                {% if project.image_url %}
+                                <div class="project-image">
+                                    <img src="{{ project.image_url }}" alt="{{ project.title }}">
+                                </div>
+                                {% endif %}
+                                <div class="project-content">
+                                    <h5 class="project-title">
+                                        {{ project.title }}
+                                        <span class="badge bg-warning text-dark ms-2">In Progress</span>
+                                    </h5>
+                                    <p class="project-description">{{ project.description }}</p>
+                                    <div class="tech-stack">
+                                        {% for tech in project.tech_stack.split(',') %}
+                                        <span class="tech-badge">{{ tech.strip() }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="project-links">
+                                        {% if project.github_url %}
+                                        <a href="{{ project.github_url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                            <i class="fab fa-github me-1"></i>Code
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="section-padding bg-dark-subtle">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="section-title text-center">Get In Touch</h2>
+                <p class="lead text-center mb-5">
+                    I'm always interested in hearing about new opportunities and exciting projects. 
+                    Let's connect and discuss how we can work together!
+                </p>
+                
+                <div class="contact-form-container">
+                    <form method="POST" action="{{ url_for('main.contact') }}" class="contact-form">
+                        {{ contact_form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ contact_form.name(class="form-control form-control-lg", placeholder="Your Name") }}
+                                {% if contact_form.name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in contact_form.name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ contact_form.email(class="form-control form-control-lg", placeholder="Your Email") }}
+                                {% if contact_form.email.errors %}
+                                    <div class="text-danger">
+                                        {% for error in contact_form.email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ contact_form.message(class="form-control form-control-lg", rows="5", placeholder="Your Message") }}
+                            {% if contact_form.message.errors %}
+                                <div class="text-danger">
+                                    {% for error in contact_form.message.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="text-center">
+                            {{ contact_form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

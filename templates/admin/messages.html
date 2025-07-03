@@ -1,0 +1,161 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Messages - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">
+        <i class="fas fa-envelope me-2"></i>Contact Messages
+    </h2>
+    <div class="text-muted">
+        Total: {{ messages|length }} messages
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        {% if messages %}
+            <div class="card bg-dark border-secondary">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Message</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for message in messages %}
+                                <tr id="message-{{ message.id }}" class="{% if not message.is_read %}table-warning{% endif %}">
+                                    <td>
+                                        <span class="badge {% if message.is_read %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                                            {% if message.is_read %}Read{% else %}New{% endif %}
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold">{{ message.name }}</td>
+                                    <td>
+                                        <a href="mailto:{{ message.email }}" class="text-decoration-none">
+                                            {{ message.email }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="message-preview" style="max-width: 300px;">
+                                            {% if message.message|length > 100 %}
+                                                <span class="preview-short">{{ message.message[:100] }}...</span>
+                                                <span class="preview-full d-none">{{ message.message }}</span>
+                                                <button class="btn btn-link btn-sm p-0 text-primary toggle-message-preview">
+                                                    Show More
+                                                </button>
+                                            {% else %}
+                                                {{ message.message }}
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {{ message.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm {% if message.is_read %}btn-outline-warning{% else %}btn-outline-success{% endif %} toggle-read-btn" 
+                                                data-message-id="{{ message.id }}" 
+                                                data-is-read="{{ message.is_read|lower }}">
+                                            <i class="fas {% if message.is_read %}fa-eye-slash{% else %}fa-check{% endif %}"></i>
+                                            {% if message.is_read %}Mark Unread{% else %}Mark Read{% endif %}
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card bg-dark border-secondary">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h5 class="text-light">No messages yet</h5>
+                    <p class="text-muted">Contact messages will appear here when visitors submit the contact form.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle message preview
+    document.querySelectorAll('.toggle-message-preview').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const preview = this.closest('.message-preview');
+            const shortText = preview.querySelector('.preview-short');
+            const fullText = preview.querySelector('.preview-full');
+            
+            if (shortText.classList.contains('d-none')) {
+                shortText.classList.remove('d-none');
+                fullText.classList.add('d-none');
+                this.textContent = 'Show More';
+            } else {
+                shortText.classList.add('d-none');
+                fullText.classList.remove('d-none');
+                this.textContent = 'Show Less';
+            }
+        });
+    });
+
+    // Toggle read status
+    document.querySelectorAll('.toggle-read-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const messageId = this.dataset.messageId;
+            const isRead = this.dataset.isRead === 'true';
+            
+            fetch(`/admin/messages/${messageId}/toggle-read`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name=csrf-token]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const row = document.getElementById(`message-${messageId}`);
+                    const badge = row.querySelector('.badge');
+                    const icon = this.querySelector('i');
+                    
+                    if (data.is_read) {
+                        // Mark as read
+                        row.classList.remove('table-warning');
+                        badge.className = 'badge bg-success';
+                        badge.textContent = 'Read';
+                        icon.className = 'fas fa-eye-slash';
+                        this.className = 'btn btn-sm btn-outline-warning toggle-read-btn';
+                        this.innerHTML = '<i class="fas fa-eye-slash"></i> Mark Unread';
+                        this.dataset.isRead = 'true';
+                    } else {
+                        // Mark as unread
+                        row.classList.add('table-warning');
+                        badge.className = 'badge bg-warning text-dark';
+                        badge.textContent = 'New';
+                        icon.className = 'fas fa-check';
+                        this.className = 'btn btn-sm btn-outline-success toggle-read-btn';
+                        this.innerHTML = '<i class="fas fa-check"></i> Mark Read';
+                        this.dataset.isRead = 'false';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update message status');
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
